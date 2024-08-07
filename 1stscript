@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+import os
+import re
+import shutil
+
+directory = input("Enter the name of directory.")
+def create_directories(directory_name): #takes path to a directory and creates multiple directories within it
+  os.chdir(directory_name)
+  directories_names = ["Images","Videos","Music","Documents","Other"]
+  for directory in directories_names:
+    if not os.path.exists(os.path.join(directory_name, directory)):
+       os.mkdir(directory)
+
+
+def organize_files(directory_name):   #takes path to same directory and moves related files to relative directories
+  files_and_directories = os.listdir(directory_name)
+  print(files_and_directories)
+  files = [file for file in files_and_directories if os.path.isfile(os.path.join(directory_name,file))] #extract files only
+  print(files)
+  for file_name in files:
+    pattern= r"([A-Za-z].*)(\.\w+)$"   #regex to find files with certain extensions
+    result = re.search(pattern, file_name)
+    print(result)
+    file_path = os.path.join(directory_name, file_name)
+
+    if result[2] == ".jpg":
+      move_to = os.path.join(directory_name, "Images")
+      shutil.move(file_path, move_to)
+      print("moved")
+    if result[2] == ".mp4":
+      move_to = os.path.join(directory_name, "Videos")
+      shutil.move(file_path, move_to)
+      print("moved")
+    if result[2] == ".hevc":
+      move_to = os.path.join(directory_name, "Videos")
+      shutil.move(file_path, move_to)
+      print("moved")
+
+    if result[2] == ".pdf" or result[2] == ".txt":
+      move_to = os.path.join(directory_name, "Documents")
+      shutil.move(file_path, move_to)
+      print("moved")
+    if result[2] == ".mp3":
+      move_to = os.path.join(directory_name, "Music")
+      shutil.move(file_path, move_to)
+      print("moved")
+    else:
+      move_to = os.path.join(directory_name, "Others")
+      shutil.move(file_path, move_to)
+      print("moved")
+    
+      
+      
+
+create_directories(directory)
+organize_files(directory)
